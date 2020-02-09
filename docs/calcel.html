@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JangbeeCall - Payment Calcel</title>
+
+
+<script>
+
+/**
+ * 페이지 로딩이 되면 모바일앱에 token 발급을 위한 정보를 요청한다.
+ */
+ document.addEventListener("DOMContentLoaded", function(event) 
+ {
+     //앱 정보를 받기 위한 리스너 설정 
+    document.addEventListener('message', function(e) 
+    {
+        if(!e.data){document.getElementById("errorNotice").innerText = "앱에서 보낸 api 요청 정보가 올바르지 않습니다!"}
+
+        progress(">>> Received Information");
+    });
+});
+
+/**
+ * 에러 발생 시, Notice 및 Close 버튼 활성화
+ */
+function errorNotice(msg, isClose) 
+{
+    document.getElementById("errorNotice").innerText = msg;
+    document.getElementById("closeArea").style.display = "inline-block";
+}
+
+/**
+ * 에러 발생 시, Notice 및 Close 버튼 활성화
+ */
+ function progress(msg) 
+{
+    document.getElementById("progress").innerText += '\n'+msg;
+}
+
+
+/**
+ * 에러 발생 시, 모바일앱 WebView Close 요청
+ */
+function requestCloseWebView()
+{
+    var postData = {
+        type : 'ASK_WEBVIEWCLOSE',
+    };
+    var data = JSON.stringify(postData);
+
+    window.ReactNativeWebView.postMessage(data);
+}
+
+</script>
+
+<body>
+<!-- ===================== bootstrap modal html - start =====================-->
+<!-- 본 페이지 (callback.html) 가 index.html 과 별개로 로딩되기 때문에 단순히 메시지출력 (showMsg()) 을 위해서 추가함 -->
+<div style="width: 100%">
+    <div style="padding: 5px;">
+        <div>
+            <p>결제가 취소 되었습니다</p>
+        </div>
+        <div>
+            <p id="errorNotice" style="color:red"></p>
+        </div>
+        <div>
+            <p id="notice" style="color:blue"></p>
+        </div>
+        <div>
+            <p id="code"></p>
+            <p id="client_id"></p>
+            <p id="client_secret"></p>
+            <p id="redirect_uri"></p>
+            <p id="access_token"></p>
+            <p id="token_type"></p>
+            <p id="scope"></p>
+            <p id="expires_in"></p>
+            <p id="refresh_token"></p>
+            <p id="user_seq_no"></p>
+        </div>
+        <div>
+            <span id="closeArea"style="display:none">
+              <button type="button" class="btn btn-default" style="font-size:20px;" onclick="requestCloseWebView();">닫기</button>
+            </span>
+        </div>
+        <div>
+            <p id="progress" style="color:black"></p>
+        </div>
+    </div><!--// modal-content -->
+</div><!--// modal -->
+<!-- ===================== bootstrap modal html - start =====================-->
+</body>
+</html>
