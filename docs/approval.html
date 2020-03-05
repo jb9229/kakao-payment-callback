@@ -21,7 +21,15 @@
     document.addEventListener("DOMContentLoaded", function(event) 
     {
         
-        document.getElementById("notice").innerText = this.responseText + ' / ' + this.responseJSON;
+        document.getElementById("notice").innerText = this.responseText + ' / ' + this.status + ' / ' + this.responseJSON;
+        response.text().then(function (text) {
+          // do something with the text response 
+          document.getElementById("code").innerText = 'text: ' + text;
+        });
+        response.JSON().then(function (text) {
+          // do something with the text response 
+          document.getElementById("client_id").innerText = 'json: ' + text;
+        });
         
     });
 
