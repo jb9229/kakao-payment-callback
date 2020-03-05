@@ -20,9 +20,9 @@
     */
     document.addEventListener("DOMContentLoaded", function(event) 
     {
-        response.json().then(function(data) {
-            document.getElementById("notice").innerText = data;
-        });
+        
+        document.getElementById("notice").innerText = this.responseText + ' / ' + this.sstatus;
+        
     });
 
     /**
