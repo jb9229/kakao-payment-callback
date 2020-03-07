@@ -96,11 +96,16 @@
     function requestApproval(params, authKey)
     {
         progress(">>> Request Payment Appoval Ready");
+        progress(params);
+        progress(authKey);
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() { // 요청에 대한 콜백
+            progress(">>> Recevied Responsed");
             if (xhr.readyState === xhr.DONE) { // 요청이 완료되면
                 if (xhr.status === 200 || xhr.status === 201) 
                 {
+                    progress(">>> Recevied Responsed ok");
+                    progress(responseJsonData);
                     document.getElementById("notice").innerText = "결재에 성공 하셨습니다, 곧 창이(10초) 닫힙니다.";
                     document.getElementById("sid").innerText = responseJsonData.sid;
                 } else
@@ -110,6 +115,7 @@
             }
         }
         xhr.onerror = function(err) {
+            progress(`#### Request Error: ${err} ###`);
             errorNotice(`결제승인 요청에 실패 했습니다(${err.message})`, false);
         }
         xhr.open('POST', PAYMENT_APPROVAL_URL, true); // 메소드와 주소 설정
