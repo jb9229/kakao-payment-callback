@@ -36,9 +36,10 @@
         {
             if(!e.data){document.getElementById("errorNotice").innerText = "앱에서 보낸 api 요청 정보가 올바르지 않습니다!"}
 
-            progress(">>> Received Approval API Access Info From Jangbeecall App");
-
             var apiInfo = JSON.parse(e.data);
+
+            progress(">>> Received Approval API Access Info From Jangbeecall App");
+            progress(apiInfo);
             
             const params = getTokenParams(apiInfo);
 
@@ -72,7 +73,7 @@
     * callback 페이지 호출시 파라미터 값을 추출하여, BankAPI Token 요청 파라미터 값을 설정
     */
     function getTokenParams(apiInfo) {
-        progress(">>> PG Token Analyzing..");
+        progress(">>> PG Token Analyzing...");
 
         //get Authorization code
         var url_string = window.location.href; // www.test.com?filename=test
@@ -94,6 +95,7 @@
 
     function requestApproval(params, authKey)
     {
+        progress(">>> Request Payment Appoval Ready");
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() { // 요청에 대한 콜백
             if (xhr.readyState === xhr.DONE) { // 요청이 완료되면
@@ -107,10 +109,15 @@
                 }
             }
         }
+        xhr.onerror = function(err) {
+            errorNotice(`결제승인 요청에 실패 했습니다(${err.message})`, false);
+        }
         xhr.open('POST', PAYMENT_APPROVAL_URL, true); // 메소드와 주소 설정
         xhr.setRequestHeader('Authorization', authKey);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         xhr.send(params); // 데이터를 stringify해서 보냄
+
+        progress(">>> Request Payment Appoval...");
     }
 
     /**
@@ -119,7 +126,8 @@
     function errorNotice(msg, isClose) 
     {
         document.getElementById("errorNotice").innerText = msg;
-        document.getElementById("closeArea").style.display = "inline-block";
+
+        if (isClose) { document.getElementById("closeArea").style.display = "inline-block"; }
     }
 
     /**
