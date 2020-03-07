@@ -112,10 +112,15 @@
                 {
                     errorNotice("예기치 못한 에러 발생, 창을 닫고 다시 시도 부탁 드립니다("+xhr.status+","+xhr.responseText+")", true);
                 }
+            } else {
+                progress(`#### Recevied Bad Response ####`);
+                progress(xhr.status);
+                progress(xhr.statusText);
             }
         }
         xhr.onerror = function(err) {
             progress(`#### Request Error: ${err} ###`);
+            progress(err);
             errorNotice(`결제승인 요청에 실패 했습니다(${err.message})`, false);
         }
         xhr.open('POST', PAYMENT_APPROVAL_URL, true); // 메소드와 주소 설정
