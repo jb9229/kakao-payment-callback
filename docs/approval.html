@@ -119,11 +119,11 @@
                 }
             }
         }
-        xhr.onerror = function(err) {
-            progress(`#### Request Error: ${err} ###`);
-            progress(err);
-            errorNotice(`결제승인 요청에 실패 했습니다(${err.message})`, false);
-        }
+        // xhr.onerror = function(err) {
+        //     progress(`#### Request Error: ${err} ###`);
+        //     progress(err);
+        //     errorNotice(`결제승인 요청에 실패 했습니다(${err.message})`, false);
+        // }
         xhr.open('POST', PAYMENT_APPROVAL_URL, true); // 메소드와 주소 설정
         // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         xhr.send(params); // 데이터를 stringify해서 보냄
