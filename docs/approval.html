@@ -26,8 +26,12 @@
     */
     document.addEventListener("DOMContentLoaded", function(event) 
     {
-
-        addAppInfoListener();
+        // addAppInfoListener();
+        /**!! 구현 사유 !!
+        * 페이지 로딩 후, 모바일앱에 정보를 요청하면 실패한다
+        * 1초 후 비동기적으로 호출 시, 성공
+        */
+        setTimeout(function(){ requestApprovalApiInfo(); }, 1000);
     });
 
     //앱 정보를 받기 위한 리스너 설정
@@ -49,12 +53,6 @@
                 requestApproval(params, apiInfo.authKey);
             }
         });
-
-        /**!! 구현 사유 !!
-        * 페이지 로딩 후, 모바일앱에 정보를 요청하면 실패한다
-        * 1초 후 비동기적으로 호출 시, 성공
-        */
-        setTimeout(function(){ requestApprovalApiInfo(); }, 1000);
     }
 
     /**
@@ -62,12 +60,26 @@
     */
     function requestApprovalApiInfo()
     {
-        var postData = {
-            type : 'ASK_APPROVAL_INFO',
-        };
-        var data = JSON.stringify(postData);
+        //get Authorization code
+        var url_string = window.location.href; // www.test.com?filename=test
+        var url = new URL(url_string);
+        var pgToken = url.searchParams.get("pg_token");
+    
+        if (pgToken)
+        {
+            var postData = {
+                type : 'ASK_APPROVAL_INFO',
+                data : {
+                    pg_token: pgToken
+                }
+            };
+            var data = JSON.stringify(postData);
 
-        window.ReactNativeWebView.postMessage(data);
+            window.ReactNativeWebView.postMessage(data);
+        } else
+        {
+            errorNotice("비 정상 값으로인해 결재에 실패했습니다, 창을 닫은 후, 재 시도 부탁 드립니다.", true);
+        }
     }
 
     /**
