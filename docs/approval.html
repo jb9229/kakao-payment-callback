@@ -18,7 +18,8 @@
     
 
     // Static Variables
-    const PAYMENT_APPROVAL_URL = 'https://kapi.kakao.com/v1/payment/approve';
+    // const PAYMENT_APPROVAL_URL = 'https://kapi.kakao.com/v1/payment/approve';
+    const PAYMENT_APPROVAL_URL = 'http://192.168.0.4:8080/api/v1/payment/approve';
 
     /**
     * 페이지 로딩이 되면 모바일앱에 Approval Access 정보를 요청한다.
@@ -87,8 +88,8 @@
         if(!apiInfo.cid_secret || apiInfo.cid_secret.length === 0){errorNotice("앱으로부터 cid_secret 정보를 가져오지 못 했습니다, 창을 닫은 후, 재 시도 부탁 드립니다.", true); return false;}
         if(!apiInfo.tid || apiInfo.tid.length === 0){errorNotice("앱으로부터 tid 정보를 가져오지 못 했습니다, 창을 닫은 후, 재 시도 부탁 드립니다.", true); return false;}
 
-        const params = `pg_token=${pgToken}&cid=${apiInfo.cid}&tid=${apiInfo.tid}`
-        + `&partner_order_id=${apiInfo.partner_order_id}&partner_user_id=${apiInfo.partner_user_id}`;
+        const params = `pgToken=${pgToken}&cid=${apiInfo.cid}&tid=${apiInfo.tid}`
+        + `&partnerOrderId=${apiInfo.partner_order_id}&partnerUserId=${apiInfo.partner_user_id}`;
 
         return params;
     }
@@ -104,6 +105,7 @@
             if (xhr.readyState === xhr.DONE) { // 요청이 완료되면
                 if (xhr.status === 200 || xhr.status === 201) 
                 {
+                    var responseJsonData = xhr.responseJsonData;
                     progress(">>> Recevied Responsed ok");
                     progress(responseJsonData);
                     document.getElementById("notice").innerText = "결재에 성공 하셨습니다, 곧 창이(10초) 닫힙니다.";
@@ -123,8 +125,7 @@
             errorNotice(`결제승인 요청에 실패 했습니다(${err.message})`, false);
         }
         xhr.open('POST', PAYMENT_APPROVAL_URL, true); // 메소드와 주소 설정
-        xhr.setRequestHeader('Authorization', authKey);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         xhr.send(params); // 데이터를 stringify해서 보냄
 
         progress(">>> Request Payment Appoval...");
