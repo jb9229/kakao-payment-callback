@@ -43,7 +43,7 @@
             progress(e.data);
             
             const params = getTokenParams(apiInfo);
-
+            progress(params);
             if (params)
             {
                 requestApproval(params, apiInfo.authKey);
@@ -92,7 +92,7 @@
 
         // const params = `pgToken=${pgToken}&cid=${apiInfo.cid}&tid=${apiInfo.tid}`
         // + `&partnerOrderId=${apiInfo.partner_order_id}&partnerUserId=${apiInfo.partner_user_id}`;
-
+        progress(">>> Make Params...");
         const params = {
             pgToken,
             cid: apiInfo.cid,
@@ -100,7 +100,7 @@
             partnerOrderId: apiInfo.partner_order_id,
             partnerUserId: api.partner_user_id
         }
-
+        progress(">>> Maked Params");
         return params;
     }
 
